@@ -5,7 +5,7 @@ import * as dat from 'dat.gui'
 import {Curves} from "three/examples/jsm/curves/CurveExtras";
 
 export const Spring = (setOpen) => {
-    let scene, camera, renderer,controls;
+    let scene, camera, renderer, controls;
     let WIGHT = window.innerWidth;
     let HEIGHT = window.innerHeight;
 
@@ -82,38 +82,38 @@ export const Spring = (setOpen) => {
     }
 
 
-   const initAmbientLight = () => {
-       const ambientLight = new THREE.AmbientLight(0xffffff, 0.75)
-       scene.add(ambientLight)
+    const initAmbientLight = () => {
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.75)
+        scene.add(ambientLight)
 
-   }
+    }
 
-   const initDirectionalLight = () => {
-       const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9)
-       directionalLight.position.set(75, 150, 180);
+    const initDirectionalLight = () => {
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9)
+        directionalLight.position.set(75, 150, 180);
 
-       directionalLight.shadow.mapSize.width = 2048
-       directionalLight.shadow.mapSize.height = 2048
+        directionalLight.shadow.mapSize.width = 2048
+        directionalLight.shadow.mapSize.height = 2048
 
-       directionalLight.shadowCameraLeft = -300;
-       directionalLight.shadowCameraRight = 300;
-       directionalLight.shadowCameraTop = 300;
-       directionalLight.shadowCameraBottom = -300;
+        directionalLight.shadowCameraLeft = -300;
+        directionalLight.shadowCameraRight = 300;
+        directionalLight.shadowCameraTop = 300;
+        directionalLight.shadowCameraBottom = -300;
 
-       directionalLight.castShadow = true;
+        directionalLight.castShadow = true;
 
-       scene.add(directionalLight)
+        scene.add(directionalLight)
 
-       gui.add(directionalLight.position, 'x').min(-160).max(160).step(0.001)
-       gui.add(directionalLight.position, 'y').min(-180).max(180).step(0.001)
-       gui.add(directionalLight.position, 'z').min(120).max(180).step(0.001)
-   }
+        gui.add(directionalLight.position, 'x').min(-160).max(160).step(0.001)
+        gui.add(directionalLight.position, 'y').min(-180).max(180).step(0.001)
+        gui.add(directionalLight.position, 'z').min(120).max(180).step(0.001)
+    }
 
 
-     const initControls = () => {
-         controls = new OrbitControls(camera, renderer.domElement)
-         controls.enableDamping = true
-     }
+    const initControls = () => {
+        controls = new OrbitControls(camera, renderer.domElement)
+        controls.enableDamping = true
+    }
 
 
     const init = () => {
