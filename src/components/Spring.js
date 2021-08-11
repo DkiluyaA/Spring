@@ -8,6 +8,9 @@ export const Spring = (setOpen) => {
     let scene, camera, renderer, controls;
     let WIGHT = window.innerWidth;
     let HEIGHT = window.innerHeight;
+    let directionalLight;
+    let positionX;
+    let material;
 
     const gui = new dat.GUI();
     let draggable = new THREE.Object3D();
@@ -32,32 +35,21 @@ export const Spring = (setOpen) => {
     }
 
     const initSpring = () => {
-        const textureLoader = new THREE.TextureLoader();
-        const colorTexture = textureLoader.load('textures/basecolor.jpg')
-        const ambientOcclusionTexture = textureLoader.load('textures/ambientOcclusion.jpg')
-        const heightTexture = textureLoader.load('textures/height.jpg')
-        const normalTexture = textureLoader.load('textures/normal.jpg')
-        const metalnessTexture = textureLoader.load('textures/metallic.jpg')
-        const roughnessTexture = textureLoader.load('textures/roughness.jpg')
-
-        const material = new THREE.MeshPhysicalMaterial()
-        material.metalness = 0.15
-        material.roughness = 1
+        const cubeTextureLoader = new THREE.CubeTextureLoader()
+        const environmentMapTexture = cubeTextureLoader.load([
+            'textures/0/px.jpg',
+            'textures/0/nx.jpg',
+            'textures/0/py.jpg',
+            'textures/0/ny.jpg',
+            'textures/0/pz.jpg',
+            'textures/0/nz.jpg'
+        ])
+        material = new THREE.MeshStandardMaterial()
+        material.metalness = 0.7
+        material.roughness = 0.15
+        material.envMap = environmentMapTexture;
         gui.add(material, 'metalness').min(0).max(1).step(0.0001)
         gui.add(material, 'roughness').min(0).max(1).step(0.0001)
-
-        material.map = colorTexture;
-        material.aoMap = ambientOcclusionTexture;
-        material.aoMapIntensity = 1;
-        material.displacementMap = heightTexture;
-        material.displacementScale = 0.05;
-        material.metalnessMap = metalnessTexture;
-        material.roughnessMap =roughnessTexture;
-        material.normalMap = normalTexture;
-        material.normalScale.set(0.5, 0.5);
-        material.transparent = true
-        material.clearcoat = 1;
-        material.clearcoatRoughness = 0.5
 
         const extrudePath = new Curves.HelixCurve();
 
@@ -108,7 +100,7 @@ export const Spring = (setOpen) => {
     }
 
     const initDirectionalLight = () => {
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9)
+        directionalLight = new THREE.DirectionalLight(0xffffff, 0.9)
         directionalLight.position.set(75, 150, 180);
 
         directionalLight.shadow.mapSize.width = 2048
@@ -153,6 +145,7 @@ export const Spring = (setOpen) => {
     }
 
     const render = () => {
+        directionalLight.position.x = positionX * 100;
         renderer.render(scene, camera)
         window.requestAnimationFrame(render)
     }
@@ -179,6 +172,10 @@ export const Spring = (setOpen) => {
             draggable = found[0].object;
             setOpen(true);
         }
+    })
+
+    window.addEventListener('mousemove', (event) => {
+        positionX = event.clientX / WIGHT - 0.5;
     })
 
     init();
